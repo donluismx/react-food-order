@@ -9,7 +9,7 @@ const Header = () => {
       <div className={styles.header}>
         <p>Header</p>
       </div>
-      <div className="main-image">
+      <div className={styles["main-image"]}>
         <img src={HeaderImage} alt="" />
       </div>
     </Fragment>
