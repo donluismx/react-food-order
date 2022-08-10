@@ -1,6 +1,6 @@
 import React from 'react';
 
-import MealItem from './MealItem';
+import MealItem from '../MealItem/MealItem';
 
 import styles from './AvailableMeals.module.css';
 import Card from '../UI/Card';
