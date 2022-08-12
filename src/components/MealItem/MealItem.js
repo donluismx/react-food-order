@@ -1,16 +1,27 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 
 import styles from "./MealItem.module.css";
 import MealItemForm from "./MealItemForm";
+import CartProvider from "../../store/cart-context";
 
 const Meal = (props) => {
+  const cartCtx = useContext(CartProvider);
   const inputRef = useRef();
-  const [inputValue, setInputValue] = useState("5");
+//  const [inputValue, setInputValue] = useState("5");
 
 
   const submitHandler = (event) => {
     event.preventDefault();
-    
+    const submittedMeal = {
+      id: props.id,
+      name: props.name,
+      description: props.description,
+      price: props.price,
+      quantity: +inputRef.current.value
+    };
+
+    cartCtx.onAddMeal(submittedMeal);
+
     const enteredValue = inputRef.current.value;
     console.log("Entered: " + enteredValue);
   };
