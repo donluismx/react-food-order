@@ -2,10 +2,10 @@ import React, { useRef, useContext } from "react";
 
 import styles from "./MealItem.module.css";
 import MealItemForm from "./MealItemForm";
-import CartProvider from "../../store/cart-context";
+import CartContext from "../../store/cart-context";
 
 const Meal = (props) => {
-  const cartCtx = useContext(CartProvider);
+  const cartCtx = useContext(CartContext);
   const inputRef = useRef();
 
   const submitHandler = (event) => {
@@ -21,7 +21,7 @@ const Meal = (props) => {
     cartCtx.onAddMeal(submittedMeal);
 
     const enteredValue = inputRef.current.value;
-    console.log("Entered: " + enteredValue);
+    // console.log("Entered: " + enteredValue);
   };
 
   return (

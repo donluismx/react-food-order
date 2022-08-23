@@ -1,51 +1,66 @@
-import React, { useReducer } from 'react';
-
+import { useReducer } from 'react';
 import CartContext from './cart-context';
 
 const defaultCartState = {
   meals: [],
-  amount: 0
+  amount: 0,
+  totalQuantity: 0
 };
 
 const calculateCart = (meals) => {
   const cartAmount = meals.reduce((curAmount, meal) => {
-    return curAmount + meal.price;
+    return curAmount + meal.price * meal.quantity;
   },0);
-  return cartAmount;
+  const totalQuantity = meals.reduce((curAmount, meal) => {
+    return curAmount + meal.quantity;
+  },0);
+  const cartTotals = {
+    amount: cartAmount,
+    totalQuantity: totalQuantity
+  }
+  return cartTotals;
 };
 
 const cartReducer = (state, action) => {
   
-  let cartMeals = [...state.meals];
-  let cartAmount = state.amount;
+  const existingMealIndex = state.meals.findIndex((meal) => meal.id === action.meal.id );
+  const existingMeal = state.meals[existingMealIndex];
 
-  const existingMealIndex = cartMeals.findIndex((meal) => 
-    meal.id  = action.meal.id
-  );
+  let updatedMeals;
 
   if(action.type === 'ADD'){
 
-    if ( existingMealIndex !== -1 ){
+    if ( existingMeal ){
       console.log("Adding a Meal that exists ");
 
-      let sumQuantities = parseInt(cartMeals[existingMealIndex].quantity) + parseInt(action.meal.quantity);
-      cartMeals[existingMealIndex].quantity = sumQuantities;
+      const updatedMeal = {
+        ...existingMeal,
+        quantity: existingMeal.quantity + action.meal.quantity
+      }
+
+      updatedMeals = [...state.meals];
+      updatedMeals[existingMealIndex] = updatedMeal;
+
     }
     else{
-      console.log("Adding a Meal that does NOT exists");
-      cartMeals = cartMeals.concat(action.meal);
+      console.log("Adding a Meal that doe/s NOT exists");
+      updatedMeals = state.meals.concat(action.meal);
     }
   }
   if(action.type === 'REMOVE'){
-    if ( existingMealIndex !== -1 ){
+    if ( existingMeal ){
       console.log("Removing a Meal that exists");
+      
     }
     else{
       console.log("Removing a Meal that does NOT exists");
     }
   }
+  const cartTotal = calculateCart(updatedMeals);
 
-  return { meals: cartMeals, amount: cartAmount }
+  console.log(updatedMeals);
+  console.log(cartTotal);
+  return { meals: updatedMeals, amount: cartTotal.amount, totalQuantity: cartTotal.totalQuantity }
 };
 
 const CartProvider = (props) => {
@@ -71,6 +86,7 @@ const CartProvider = (props) => {
       value= {{
         meals: mealsState.meals,
         amount: mealsState.amount,
+        totalQuantity: mealsState.totalQuantity,
         onAddMeal: addMealHandler,
         onRemoveMeal: removeMealHandler
       }}
