@@ -10,7 +10,7 @@ const CartItem = props => {
       </div>
       <div className={classes.actions}>
         <button>+</button>
-        <button>+</button>
+        <button>-</button>
       </div>
     </div>
   );

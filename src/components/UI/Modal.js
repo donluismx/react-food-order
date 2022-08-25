@@ -7,13 +7,15 @@ const Backdrop = props => {
 }
 
 const ModalOverlay = props => {
+  return (
   <div className={classes.modal}>
     {props.children}
   </div>
+  )
 }
 
 const Modal = props => {
-  return
+  return(
   <>
   {ReactDom.createPortal(
     <Backdrop onConfirm={props.onConfirm} />,
@@ -23,9 +25,10 @@ const Modal = props => {
     <ModalOverlay>
       {props.children}
     </ModalOverlay>,
-    document.getElementById('backdrop-overlay')
+    document.getElementById('overlay-root')
   )}
   </>
+  )
 }
 
 export default Modal;
