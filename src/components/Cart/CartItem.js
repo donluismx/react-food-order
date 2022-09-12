@@ -1,6 +1,14 @@
 import classes from './CartItem.module.css';
 
 const CartItem = props => {
+
+  const addHandler = () => {
+    props.onAddMeal(props.meal);
+  }
+  const removeHandler = () => {
+    props.onRemoveMeal(props.meal.id);
+  }
+
   return (
     <div className={classes['cart-item']}>
       <h2>{props.meal.name}</h2>
@@ -9,8 +17,8 @@ const CartItem = props => {
         <div className={classes.amount}>{props.meal.quantity}</div>
       </div>
       <div className={classes.actions}>
-        <button>+</button>
-        <button>-</button>
+        <button onClick={addHandler}>+</button>
+        <button onClick={removeHandler}>-</button>
       </div>
     </div>
   );

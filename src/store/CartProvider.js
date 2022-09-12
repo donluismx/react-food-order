@@ -22,14 +22,16 @@ const calculateCart = (meals) => {
 };
 
 const cartReducer = (state, action) => {
-  
-  const existingMealIndex = state.meals.findIndex((meal) => meal.id === action.meal.id );
+  const id = (action.type === 'ADD' ? action.meal.id : action.id);
+  const existingMealIndex = state.meals.findIndex((meal) => meal.id === id );
   const existingMeal = state.meals[existingMealIndex];
 
+  console.log(existingMealIndex);
+  
   let updatedMeals;
 
   if(action.type === 'ADD'){
-
+    //The meal exists and we check wether to increment it's quantity or add it to the cart
     if ( existingMeal ){
       console.log("Adding a Meal that exists ");
 
@@ -37,20 +39,31 @@ const cartReducer = (state, action) => {
         ...existingMeal,
         quantity: existingMeal.quantity + action.meal.quantity
       }
-
+      
       updatedMeals = [...state.meals];
       updatedMeals[existingMealIndex] = updatedMeal;
-
+      
     }
     else{
-      console.log("Adding a Meal that doe/s NOT exists");
+      console.log("Adding a Meal that does NOT exists");
       updatedMeals = state.meals.concat(action.meal);
     }
   }
-  if(action.type === 'REMOVE'){
+  if(action.type === 'SUBSTRACT'){
+    updatedMeals = [...state.meals];
     if ( existingMeal ){
       console.log("Removing a Meal that exists");
-      
+      // The meal to remove exists and we need to check how many items the cart has of that meal
+      if (existingMeal.quantity > 1){
+        const updatedMeal = {
+          ...existingMeal,
+          quantity: existingMeal.quantity -1
+        }
+        updatedMeals[existingMealIndex] = updatedMeal;
+      }
+      else{
+        updatedMeals = state.meals.filter(meal => meal.id !== existingMeal.id);
+      }
     }
     else{
       console.log("Removing a Meal that does NOT exists");
